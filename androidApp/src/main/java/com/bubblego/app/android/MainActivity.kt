@@ -24,6 +24,8 @@ class MainActivity : ComponentActivity() {
             // Test G
             // Test G2
             // Test G3
+            // Test G4
+            // Test G5
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
