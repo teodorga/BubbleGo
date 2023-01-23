@@ -14,6 +14,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            // Test A
+            // Test B
+            // Test C
+            // Test D
+            // Test E
+            // Test F
+            // Test G
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
