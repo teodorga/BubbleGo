@@ -40,7 +40,7 @@ fun BubbleCarTheme(
             fontSize = 20.sp
         ),
         body1 = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = FontFamily(Font(R.font.airbnb_cereal_w_lt)),
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp
         ),
@@ -52,7 +52,7 @@ fun BubbleCarTheme(
     )
     val shapes = Shapes(
         small = RoundedCornerShape(4.dp),
-        medium = RoundedCornerShape(4.dp),
+        medium = RoundedCornerShape(5.dp),
         large = RoundedCornerShape(36.dp)
     )
 
