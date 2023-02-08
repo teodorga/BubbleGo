@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.bubblego.app.android.ui.screens.NewAppLocationScreen
 import com.bubblego.app.android.ui.screens.NewAppServicesScreen
 import com.bubblego.app.android.ui.screens.WelcomeScreen
 
@@ -26,7 +27,17 @@ fun NavGraph(
         composable(
             route = Screen.NewAppServices.route
         ) {
-            NewAppServicesScreen()
+            NewAppServicesScreen(
+                navController = navController
+            )
+        }
+
+        composable(
+            route = Screen.NewAppLocation.route
+        ) {
+            NewAppLocationScreen(
+                navController = navController
+            )
         }
     }
 }

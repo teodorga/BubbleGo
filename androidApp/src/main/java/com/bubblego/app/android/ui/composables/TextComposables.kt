@@ -44,6 +44,17 @@ fun DescriptionText(text: String, modifier: Modifier) {
 }
 
 @Composable
+fun SecondDescriptionText(text: String, modifier: Modifier) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.body2,
+        color = MaterialTheme.colors.onSurface,
+        textAlign = TextAlign.Center,
+        modifier = modifier
+    )
+}
+
+@Composable
 fun BoldPriceText(text: String, modifier: Modifier) {
     Row(
         modifier = modifier,

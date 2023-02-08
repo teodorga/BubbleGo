@@ -1,14 +1,15 @@
 package com.bubblego.app.android.ui.screens
 
+import android.location.Geocoder
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -16,17 +17,20 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bubblego.app.android.theme.BubbleCarTheme
-import com.bubblego.app.android.ui.Screen
 import com.bubblego.app.android.ui.composables.*
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.rememberCameraPositionState
+import java.util.*
 
 @Preview
 @Composable
-fun NewAppServicesPreview() {
-    NewAppServicesScreen(navController = rememberNavController())
+fun NewAppLocationPreview() {
+    NewAppLocationScreen(navController = rememberNavController())
 }
 
 @Composable
-fun NewAppServicesScreen(
+fun NewAppLocationScreen(
     navController: NavController
 ) {
     BubbleCarTheme {
@@ -39,7 +43,7 @@ fun NewAppServicesScreen(
                     end = 20.dp
                 )
         ) {
-            ConstraintLayoutNewAppServices(
+            ConstraintLayoutNewAppLocation(
                 navController = navController
             )
         }
@@ -47,7 +51,7 @@ fun NewAppServicesScreen(
 }
 
 @Composable
-fun ConstraintLayoutNewAppServices(
+fun ConstraintLayoutNewAppLocation(
     navController: NavController
 ) {
     ConstraintLayout(
@@ -58,13 +62,19 @@ fun ConstraintLayoutNewAppServices(
             welcomeTitle,
             stepSubTitle,
             descriptionText,
-            servicesList,
-            totalText,
-            continueButton
+            mapHolder,
+            secondDescriptionText,
+            selectLocationButton
         ) = createRefs()
 
+        val context = LocalContext.current
+
+        var locationTextHolder by remember {
+            mutableStateOf("Place the marker on the map accordingly")
+        }
+
         WelcomeTitle(
-            text = "Choose the services",
+            text = "Location",
             modifier = Modifier.constrainAs(welcomeTitle) {
                 top.linkTo(parent.top, margin = 50.dp)
                 start.linkTo(parent.start)
@@ -73,7 +83,7 @@ fun ConstraintLayoutNewAppServices(
         )
 
         SubTitle(
-            text = "Step 1/4",
+            text = "Step 2/4",
             modifier = Modifier.constrainAs(stepSubTitle) {
                 top.linkTo(welcomeTitle.bottom, margin = 5.dp)
                 start.linkTo(parent.start)
@@ -82,7 +92,7 @@ fun ConstraintLayoutNewAppServices(
         )
 
         DescriptionText(
-            text = "Firstly, select what type of cleaning services do you need for your car",
+            text = "Now, we need to know where your car is parked",
             modifier = Modifier.constrainAs(descriptionText) {
                 top.linkTo(stepSubTitle.bottom, margin = 60.dp)
                 start.linkTo(parent.start)
@@ -90,39 +100,58 @@ fun ConstraintLayoutNewAppServices(
             }
         )
 
-        ServicesList(
+        val currentLocation = LatLng(
+            46.773016, 23.623153
+        )
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(
+                currentLocation,
+                15f
+            )
+        }
+
+        RoundedLocationMap(
             modifier = Modifier
-                .wrapContentHeight(Alignment.CenterVertically)
-                .padding(top = 20.dp, bottom = 20.dp)
-                .constrainAs(servicesList) {
-                    top.linkTo(descriptionText.bottom)
+                .fillMaxSize()
+                .constrainAs(mapHolder) {
+                    top.linkTo(descriptionText.bottom, margin = 14.dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    bottom.linkTo(totalText.top)
+                    bottom.linkTo(selectLocationButton.top, margin = 75.dp)
                     height = Dimension.fillToConstraints
-                }
+                },
+            cameraPositionState = cameraPositionState
         )
 
-        TotalPriceText(
-            text = "50",
-            modifier = Modifier.constrainAs(totalText) {
-                bottom.linkTo(continueButton.top, margin = 20.dp)
+        SecondDescriptionText(
+            text = locationTextHolder,
+            modifier = Modifier.constrainAs(secondDescriptionText) {
+                top.linkTo(mapHolder.bottom, margin = 10.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-
             }
         )
 
+        val geocoder = Geocoder(context, Locale.getDefault())
+
         PrimaryButton(
-            text = "Continue",
-            modifier = Modifier.constrainAs(continueButton) {
+            text = "Select location",
+            modifier = Modifier.constrainAs(selectLocationButton) {
                 bottom.linkTo(parent.bottom, margin = 50.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
         ) {
-            navController.navigate(
-                route = Screen.NewAppLocation.route
+            val address = geocoder.getFromLocation(
+                cameraPositionState.position.target.latitude,
+                cameraPositionState.position.target.longitude,
+                1,
+            )
+            locationTextHolder = address!![0].getAddressLine(0)
+
+            Log.d(
+                "Location", cameraPositionState.position.target.latitude.toString() + " " +
+                        cameraPositionState.position.target.longitude.toString()
             )
         }
     }

@@ -44,6 +44,11 @@ fun BubbleCarTheme(
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp
         ),
+        body2 = TextStyle(
+            fontFamily = FontFamily(Font(R.font.airbnb_cereal_w_lt)),
+            fontWeight = FontWeight.Normal,
+            fontSize = 13.sp
+        ),
         button = TextStyle(
             fontFamily = FontFamily(Font(R.font.airbnb_cereal_w_md)),
             fontWeight = FontWeight.Normal,
