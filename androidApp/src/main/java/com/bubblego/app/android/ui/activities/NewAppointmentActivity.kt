@@ -5,9 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.bubblego.app.android.ui.MainNavGraph
+import com.bubblego.app.android.ui.NewAppointmentNavGraph
 
-class MainFlowActivity : ComponentActivity() {
+class NewAppointmentActivity : ComponentActivity() {
 
     lateinit var navController: NavHostController
 
@@ -15,9 +15,8 @@ class MainFlowActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             navController = rememberNavController()
-            MainNavGraph(navController = navController)
+            NewAppointmentNavGraph(navController = navController)
         }
 
     }
 }
-

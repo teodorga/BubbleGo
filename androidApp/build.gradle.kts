@@ -48,4 +48,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.5.3")
     implementation("com.google.maps.android:maps-compose:2.9.1")
     implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.pay.button:compose-pay-button:0.1.0-beta02")
+    implementation("com.airbnb.android:lottie:6.0.0")
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
 }

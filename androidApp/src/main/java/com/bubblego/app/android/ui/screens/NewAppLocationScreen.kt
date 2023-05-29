@@ -17,6 +17,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bubblego.app.android.theme.BubbleCarTheme
+import com.bubblego.app.android.ui.Screen
 import com.bubblego.app.android.ui.composables.*
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -142,12 +143,19 @@ fun ConstraintLayoutNewAppLocation(
                 end.linkTo(parent.end)
             }
         ) {
-            val address = geocoder.getFromLocation(
-                cameraPositionState.position.target.latitude,
-                cameraPositionState.position.target.longitude,
-                1,
-            )
-            locationTextHolder = address!![0].getAddressLine(0)
+
+            if (!cameraPositionState.isMoving) {
+                val address = geocoder.getFromLocation(
+                    cameraPositionState.position.target.latitude,
+                    cameraPositionState.position.target.longitude,
+                    1,
+                )
+                locationTextHolder = address!![0].getAddressLine(0)
+
+                navController.navigate(
+                    route = Screen.NewAppDetails.route
+                )
+            }
 
             Log.d(
                 "Location", cameraPositionState.position.target.latitude.toString() + " " +

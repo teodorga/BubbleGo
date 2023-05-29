@@ -3,10 +3,9 @@ package com.bubblego.app.android.ui.composables
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,15 +13,27 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.bubblego.app.android.R
 import com.bubblego.app.android.theme.BubbleCarTheme
 import com.bubblego.app.android.theme.bubbleCarCheckboxColors
+import com.bubblego.app.android.theme.bubbleCarOutlinedColors
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import com.google.pay.button.ButtonTheme
+import com.google.pay.button.ButtonType
+import com.google.pay.button.PayButton
 
 @Composable
 fun HolderBox(modifier: Modifier) {
@@ -64,6 +75,22 @@ fun ServiceCheckBoxPreview() {
     }
 }
 
+@Preview
+@Composable
+fun SuccessDialogPreview() {
+    BubbleCarTheme {
+        Box(
+            modifier = Modifier.background(MaterialTheme.colors.background)
+        ) {
+            SuccessDialog(
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(200.dp)
+            )
+        }
+    }
+}
+
 @Composable
 fun ServiceCheckBox(text: String, price: String, modifier: Modifier) {
     Box(
@@ -72,7 +99,7 @@ fun ServiceCheckBox(text: String, price: String, modifier: Modifier) {
             .fillMaxWidth()
             .background(
                 MaterialTheme.colors.primaryVariant,
-                MaterialTheme.shapes.medium
+                MaterialTheme.shapes.small
             )
     ) {
         ConstraintLayout(
@@ -202,5 +229,110 @@ fun RoundedLocationMap(
                 .padding(bottom = imagePadding)
                 .scale(0.15f)
         )
+    }
+}
+
+@Composable
+fun CustomEditText(
+    modifier: Modifier,
+    text: TextFieldValue,
+    placeHolder: String,
+    label: String,
+    onValueChange: (TextFieldValue) -> Unit
+) {
+    OutlinedTextField(
+        value = text,
+        textStyle = LocalTextStyle.current.copy(
+            textAlign = TextAlign.Center
+        ),
+        onValueChange = {
+            onValueChange(it)
+        },
+        placeholder = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = placeHolder,
+                    textAlign = TextAlign.Center
+                )
+            }
+        },
+        label = {
+            Text(
+                text = label,
+                textAlign = TextAlign.Center,
+            )
+        },
+        modifier = modifier,
+        shape = MaterialTheme.shapes.medium,
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Characters,
+        ),
+        singleLine = true,
+        colors = bubbleCarOutlinedColors()
+    )
+}
+
+@Composable
+fun CustomGooglePayButton(
+    modifier: Modifier,
+    onClick: () -> Unit
+) {
+    PayButton(
+        modifier = modifier,
+        onClick = onClick,
+        allowedPaymentMethods = "TODO",
+        type = ButtonType.Pay,
+        theme = ButtonTheme.Dark
+    )
+}
+
+@Composable
+fun SuccessDialog(
+    modifier: Modifier
+) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.success_dialog_animation))
+
+    Dialog(
+        onDismissRequest = {},
+        properties = DialogProperties(dismissOnClickOutside = false)
+    ) {
+        Surface(
+            modifier = modifier,
+            color = MaterialTheme.colors.background,
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            ConstraintLayout(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val (
+                    successAnimation,
+                    dialogTitle
+                ) = createRefs()
+
+                LottieAnimation(
+                    composition = composition,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .constrainAs(successAnimation) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                )
+
+                SubTitle(
+                    text = "Payment Successful",
+                    modifier = Modifier.constrainAs(dialogTitle) {
+                        top.linkTo(successAnimation.bottom)
+                        bottom.linkTo(parent.bottom, margin = 25.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                )
+            }
+        }
     }
 }

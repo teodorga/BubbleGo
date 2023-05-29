@@ -25,7 +25,7 @@ fun BubbleCarTheme(
         primaryVariant = Color(0x213662FF),
         secondary = Color(0xFFD9D9D9),
         background = Color(0xFFFFFFFF),
-        onSurface = Color(0xFF000000),
+        onSurface = Color(0xFF000000)
     )
 
     val typography = Typography(
@@ -56,8 +56,8 @@ fun BubbleCarTheme(
         )
     )
     val shapes = Shapes(
-        small = RoundedCornerShape(4.dp),
-        medium = RoundedCornerShape(5.dp),
+        small = RoundedCornerShape(5.dp),
+        medium = RoundedCornerShape(10.dp),
         large = RoundedCornerShape(36.dp)
     )
 

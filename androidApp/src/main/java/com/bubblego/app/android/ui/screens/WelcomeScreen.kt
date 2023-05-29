@@ -1,5 +1,6 @@
 package com.bubblego.app.android.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -8,13 +9,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bubblego.app.android.theme.BubbleCarTheme
-import com.bubblego.app.android.ui.Screen
+import com.bubblego.app.android.ui.activities.NewAppointmentActivity
 import com.bubblego.app.android.ui.composables.HolderBox
 import com.bubblego.app.android.ui.composables.PrimaryButton
 import com.bubblego.app.android.ui.composables.SubTitle
@@ -62,6 +64,8 @@ fun ConstraintLayoutContent(
             appointmentButton
         ) = createRefs()
 
+        val context = LocalContext.current
+
         WelcomeTitle(
             text = "Welcome!",
             modifier = Modifier.constrainAs(welcomeText) {
@@ -96,7 +100,9 @@ fun ConstraintLayoutContent(
                 end.linkTo(parent.end)
             }
         ) {
-            navController.navigate(route = Screen.NewAppServices.route)
+            context.startActivity(
+                Intent(context, NewAppointmentActivity::class.java)
+            )
         }
     }
 }
