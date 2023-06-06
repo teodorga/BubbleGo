@@ -25,7 +25,7 @@ fun BubbleCarTheme(
         primaryVariant = Color(0x213662FF),
         secondary = Color(0xFFD9D9D9),
         background = Color(0xFFFFFFFF),
-        onSurface = Color(0xFF000000),
+        onSurface = Color(0xFF000000)
     )
 
     val typography = Typography(
@@ -40,9 +40,14 @@ fun BubbleCarTheme(
             fontSize = 20.sp
         ),
         body1 = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = FontFamily(Font(R.font.airbnb_cereal_w_lt)),
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp
+        ),
+        body2 = TextStyle(
+            fontFamily = FontFamily(Font(R.font.airbnb_cereal_w_lt)),
+            fontWeight = FontWeight.Normal,
+            fontSize = 13.sp
         ),
         button = TextStyle(
             fontFamily = FontFamily(Font(R.font.airbnb_cereal_w_md)),
@@ -51,8 +56,8 @@ fun BubbleCarTheme(
         )
     )
     val shapes = Shapes(
-        small = RoundedCornerShape(4.dp),
-        medium = RoundedCornerShape(4.dp),
+        small = RoundedCornerShape(5.dp),
+        medium = RoundedCornerShape(10.dp),
         large = RoundedCornerShape(36.dp)
     )
 
