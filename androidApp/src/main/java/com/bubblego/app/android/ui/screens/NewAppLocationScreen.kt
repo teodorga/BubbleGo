@@ -1,7 +1,6 @@
 package com.bubblego.app.android.ui.screens
 
 import android.location.Geocoder
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,10 +13,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bubblego.app.android.theme.BubbleCarTheme
 import com.bubblego.app.android.ui.Screen
+import com.bubblego.app.android.ui.activities.NewAppointmentViewModel
 import com.bubblego.app.android.ui.composables.*
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -27,12 +28,16 @@ import java.util.*
 @Preview
 @Composable
 fun NewAppLocationPreview() {
-    NewAppLocationScreen(navController = rememberNavController())
+    NewAppLocationScreen(
+        navController = rememberNavController(),
+        viewModel = hiltViewModel()
+    )
 }
 
 @Composable
 fun NewAppLocationScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: NewAppointmentViewModel
 ) {
     BubbleCarTheme {
         Surface(
@@ -45,7 +50,8 @@ fun NewAppLocationScreen(
                 )
         ) {
             ConstraintLayoutNewAppLocation(
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
     }
@@ -53,7 +59,8 @@ fun NewAppLocationScreen(
 
 @Composable
 fun ConstraintLayoutNewAppLocation(
-    navController: NavController
+    navController: NavController,
+    viewModel: NewAppointmentViewModel
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -152,15 +159,15 @@ fun ConstraintLayoutNewAppLocation(
                 )
                 locationTextHolder = address!![0].getAddressLine(0)
 
+                viewModel.location.value = Pair(
+                    cameraPositionState.position.target.latitude,
+                    cameraPositionState.position.target.longitude
+                )
+
                 navController.navigate(
                     route = Screen.NewAppDetails.route
                 )
             }
-
-            Log.d(
-                "Location", cameraPositionState.position.target.latitude.toString() + " " +
-                        cameraPositionState.position.target.longitude.toString()
-            )
         }
     }
 }

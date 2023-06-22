@@ -10,13 +10,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bubblego.app.android.theme.BubbleCarTheme
+import com.bubblego.app.android.ui.activities.NewAppointmentViewModel
 import com.bubblego.app.android.ui.composables.*
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -24,12 +27,16 @@ import kotlin.time.Duration.Companion.seconds
 @Preview
 @Composable
 fun ConfirmPayPreview() {
-    ConfirmPayScreen(navController = rememberNavController())
+    ConfirmPayScreen(
+        navController = rememberNavController(),
+        viewModel = hiltViewModel()
+    )
 }
 
 @Composable
 fun ConfirmPayScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: NewAppointmentViewModel
 ) {
     BubbleCarTheme {
         Surface(
@@ -42,7 +49,8 @@ fun ConfirmPayScreen(
                 )
         ) {
             ConstraintLayoutConfirmPay(
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
     }
@@ -50,7 +58,8 @@ fun ConfirmPayScreen(
 
 @Composable
 fun ConstraintLayoutConfirmPay(
-    navController: NavController
+    navController: NavController,
+    viewModel: NewAppointmentViewModel
 ) {
     var showSuccessDialog by remember { mutableStateOf(false) }
 
@@ -61,6 +70,7 @@ fun ConstraintLayoutConfirmPay(
         val (
             welcomeTitle,
             stepSubTitle,
+            finalPrice,
             descriptionText,
             googlePayButton,
         ) = createRefs()
@@ -86,10 +96,21 @@ fun ConstraintLayoutConfirmPay(
             }
         )
 
+        BoldPriceText(
+            text = viewModel.totalPrice.value.toString(),
+            modifier = Modifier
+                .scale(2.0F)
+                .constrainAs(finalPrice) {
+                    top.linkTo(stepSubTitle.bottom, margin = 100.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+        )
+
         DescriptionText(
             text = "Choose a payment method",
             modifier = Modifier.constrainAs(descriptionText) {
-                top.linkTo(stepSubTitle.bottom, margin = 60.dp)
+                top.linkTo(finalPrice.bottom, margin = 50.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
@@ -104,6 +125,8 @@ fun ConstraintLayoutConfirmPay(
             }
         ) {
             showSuccessDialog = true
+
+            viewModel.saveNewAppointment()
         }
 
         if (showSuccessDialog) {

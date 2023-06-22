@@ -70,7 +70,11 @@ fun ServiceCheckBoxPreview() {
         Box(
             modifier = Modifier.background(MaterialTheme.colors.background)
         ) {
-            ServiceCheckBox(text = "Exterior", price = "50", modifier = Modifier)
+            ServiceCheckBox(
+                text = "Exterior",
+                price = "50",
+                modifier = Modifier,
+                isChecked = remember { mutableStateOf(true) })
         }
     }
 }
@@ -92,7 +96,12 @@ fun SuccessDialogPreview() {
 }
 
 @Composable
-fun ServiceCheckBox(text: String, price: String, modifier: Modifier) {
+fun ServiceCheckBox(
+    text: String,
+    price: String,
+    modifier: Modifier,
+    isChecked: MutableState<Boolean>
+) {
     Box(
         modifier = modifier
             .height(60.dp)
@@ -110,10 +119,6 @@ fun ServiceCheckBox(text: String, price: String, modifier: Modifier) {
                 serviceText,
                 servicePriceText
             ) = createRefs()
-
-            val isChecked = remember {
-                mutableStateOf(false)
-            }
 
             Checkbox(
                 checked = isChecked.value,
@@ -213,7 +218,7 @@ fun RoundedLocationMap(
         }
 
         Image(
-            painter = painterResource(com.bubblego.app.android.R.drawable.location_pin_circle),
+            painter = painterResource(R.drawable.location_pin_circle),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -222,7 +227,7 @@ fun RoundedLocationMap(
         )
 
         Image(
-            painter = painterResource(com.bubblego.app.android.R.drawable.location_pin),
+            painter = painterResource(R.drawable.location_pin),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier

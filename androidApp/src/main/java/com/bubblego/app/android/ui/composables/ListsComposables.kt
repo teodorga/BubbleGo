@@ -4,16 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.bubblego.app.android.ui.activities.data.DataProvider
+import com.bubblego.app.android.ui.models.UiService
 
 @Composable
-fun ServicesList(modifier: Modifier) {
-    val services = remember {
-        DataProvider.servicesList
-    }
+fun ServicesList(modifier: Modifier, services: List<UiService>) {
 
     LazyColumn(
         modifier = modifier,
@@ -23,7 +19,8 @@ fun ServicesList(modifier: Modifier) {
             ServiceCheckBox(
                 text = service.serviceTitle,
                 price = service.priceText,
-                modifier = Modifier
+                isChecked = service.checkboxStatus,
+                modifier = Modifier,
             )
         }
     }

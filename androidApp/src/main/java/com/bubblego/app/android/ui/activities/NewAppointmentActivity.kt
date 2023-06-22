@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bubblego.app.android.ui.NewAppointmentNavGraph
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NewAppointmentActivity : ComponentActivity() {
 
     lateinit var navController: NavHostController
