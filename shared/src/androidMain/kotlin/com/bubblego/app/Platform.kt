@@ -1,6 +1,8 @@
 package com.bubblego.app
 
-class AndroidPlatform : Platform {
+import android.app.Application
+
+class AndroidPlatform : Platform, Application() {
     override val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
 }
 
