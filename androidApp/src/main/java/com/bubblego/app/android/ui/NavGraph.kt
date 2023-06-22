@@ -1,15 +1,20 @@
 package com.bubblego.app.android.ui
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.bubblego.app.android.ui.activities.NewAppointmentViewModel
 import com.bubblego.app.android.ui.screens.*
 
 @Composable
 fun NewAppointmentNavGraph(
     navController: NavHostController
 ) {
+
+    val viewModel: NewAppointmentViewModel = hiltViewModel()
+
     NavHost(
         navController = navController,
         startDestination = Screen.NewAppServices.route
@@ -19,7 +24,8 @@ fun NewAppointmentNavGraph(
             route = Screen.NewAppServices.route
         ) {
             NewAppServicesScreen(
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
 
@@ -27,7 +33,8 @@ fun NewAppointmentNavGraph(
             route = Screen.NewAppLocation.route
         ) {
             NewAppLocationScreen(
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
 
@@ -43,7 +50,8 @@ fun NewAppointmentNavGraph(
             route = Screen.ConfirmPay.route
         ) {
             ConfirmPayScreen(
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
 

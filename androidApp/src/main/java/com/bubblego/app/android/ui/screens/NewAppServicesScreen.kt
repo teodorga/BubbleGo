@@ -7,27 +7,35 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bubblego.app.android.theme.BubbleCarTheme
 import com.bubblego.app.android.ui.Screen
+import com.bubblego.app.android.ui.activities.NewAppointmentViewModel
 import com.bubblego.app.android.ui.composables.*
+
 
 @Preview
 @Composable
 fun NewAppServicesPreview() {
-    NewAppServicesScreen(navController = rememberNavController())
+    NewAppServicesScreen(
+        navController = rememberNavController(),
+        viewModel = hiltViewModel()
+    )
 }
 
 @Composable
 fun NewAppServicesScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: NewAppointmentViewModel
 ) {
     BubbleCarTheme {
         Surface(
@@ -40,7 +48,8 @@ fun NewAppServicesScreen(
                 )
         ) {
             ConstraintLayoutNewAppServices(
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
     }
@@ -48,7 +57,8 @@ fun NewAppServicesScreen(
 
 @Composable
 fun ConstraintLayoutNewAppServices(
-    navController: NavController
+    navController: NavController,
+    viewModel: NewAppointmentViewModel
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -62,6 +72,14 @@ fun ConstraintLayoutNewAppServices(
             totalText,
             continueButton
         ) = createRefs()
+
+        val services = viewModel.selectedServices.value
+
+        LaunchedEffect(services.map {
+            it.checkboxStatus.value
+        }) {
+            viewModel.computeFinalPrice(services)
+        }
 
         WelcomeTitle(
             text = "Choose the services",
@@ -91,6 +109,7 @@ fun ConstraintLayoutNewAppServices(
         )
 
         ServicesList(
+            services = services,
             modifier = Modifier
                 .wrapContentHeight(Alignment.CenterVertically)
                 .padding(top = 20.dp, bottom = 20.dp)
@@ -104,7 +123,7 @@ fun ConstraintLayoutNewAppServices(
         )
 
         TotalPriceText(
-            text = "50",
+            text = viewModel.totalPrice.value.toString(),
             modifier = Modifier.constrainAs(totalText) {
                 bottom.linkTo(continueButton.top, margin = 20.dp)
                 start.linkTo(parent.start)
@@ -121,6 +140,9 @@ fun ConstraintLayoutNewAppServices(
                 end.linkTo(parent.end)
             }
         ) {
+
+            viewModel.selectedServices.value = services
+
             navController.navigate(
                 route = Screen.NewAppLocation.route
             )

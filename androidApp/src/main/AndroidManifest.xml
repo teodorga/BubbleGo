@@ -9,6 +9,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:name=".MyApplication"
         tools:ignore="DataExtractionRules"
         tools:targetApi="s">
         <meta-data

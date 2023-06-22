@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
     kotlin("android")
 }
 
@@ -33,6 +35,7 @@ android {
     }
 }
 
+
 dependencies {
     implementation(project(":shared"))
     implementation("androidx.compose.ui:ui:1.3.3")
@@ -51,4 +54,16 @@ dependencies {
     implementation("com.google.pay.button:compose-pay-button:0.1.0-beta02")
     implementation("com.airbnb.android:lottie:6.0.0")
     implementation("com.airbnb.android:lottie-compose:6.0.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+
+    implementation("com.google.dagger:hilt-android:2.46.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("androidx.hilt:hilt-work:1.0.0")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+}
+
+kapt {
+    correctErrorTypes = true
 }
