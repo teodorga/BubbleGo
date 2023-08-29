@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    kotlin("plugin.serialization").version("1.8.21")
 }
 
 kotlin {
@@ -17,9 +18,20 @@ kotlin {
     }
 
     sourceSets {
+        val ktorVersion = "2.3.3"
+
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("script-runtime"))
+                implementation("io.ktor:ktor-client-core:2.3.3")
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation("io.ktor:ktor-server-content-negotiation:2.3.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.1")
+                implementation("io.ktor:ktor-client-content-negotiation:2.3.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+                implementation("io.ktor:ktor-client-android:$ktorVersion")
             }
 
         }
@@ -57,5 +69,11 @@ android {
     defaultConfig {
         minSdk = 26
         targetSdk = 33
+    }
+}
+
+kotlin.targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java) {
+    binaries.all {
+        binaryOptions["memoryModel"] = "experimental"
     }
 }

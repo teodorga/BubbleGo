@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -68,6 +68,7 @@ fun ConstraintLayoutNewAppServices(
             welcomeTitle,
             stepSubTitle,
             descriptionText,
+            loadingText,
             servicesList,
             totalText,
             continueButton
@@ -108,9 +109,22 @@ fun ConstraintLayoutNewAppServices(
             }
         )
 
+        SubTitle(
+            text = viewModel.networkResponse.value,
+            modifier = Modifier
+                .alpha(if (viewModel.networkResponse.value == "True") 0f else 1f)
+                .constrainAs(loadingText) {
+                    top.linkTo(descriptionText.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(totalText.top)
+            }
+        )
+
         ServicesList(
             services = services,
             modifier = Modifier
+                .alpha(if (viewModel.networkResponse.value == "True") 1f else 0f)
                 .wrapContentHeight(Alignment.CenterVertically)
                 .padding(top = 20.dp, bottom = 20.dp)
                 .constrainAs(servicesList) {
@@ -134,6 +148,7 @@ fun ConstraintLayoutNewAppServices(
 
         PrimaryButton(
             text = "Continue",
+            enabled = viewModel.totalPrice.value != 0,
             modifier = Modifier.constrainAs(continueButton) {
                 bottom.linkTo(parent.bottom, margin = 50.dp)
                 start.linkTo(parent.start)

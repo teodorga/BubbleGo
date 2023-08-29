@@ -13,9 +13,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bubblego.app.android.theme.BubbleCarTheme
+import com.bubblego.app.android.ui.activities.MainFlowViewModel
 import com.bubblego.app.android.ui.activities.NewAppointmentActivity
 import com.bubblego.app.android.ui.composables.HolderBox
 import com.bubblego.app.android.ui.composables.PrimaryButton
@@ -25,12 +27,16 @@ import com.bubblego.app.android.ui.composables.WelcomeTitle
 @Preview
 @Composable
 fun WelcomeScreenPreview() {
-    WelcomeScreen(navController = rememberNavController())
+    WelcomeScreen(
+        navController = rememberNavController(),
+        viewModel = hiltViewModel()
+    )
 }
 
 @Composable
 fun WelcomeScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: MainFlowViewModel
 ) {
     BubbleCarTheme {
         Surface(
@@ -94,6 +100,7 @@ fun ConstraintLayoutContent(
 
         PrimaryButton(
             text = "New appointment",
+            enabled = true,
             modifier = Modifier.constrainAs(appointmentButton) {
                 bottom.linkTo(parent.bottom, margin = 50.dp)
                 start.linkTo(parent.start)

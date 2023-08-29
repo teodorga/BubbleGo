@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.bubblego.app.android.ui.activities.MainFlowViewModel
 import com.bubblego.app.android.ui.activities.NewAppointmentViewModel
 import com.bubblego.app.android.ui.screens.*
 
@@ -39,6 +40,17 @@ fun NewAppointmentNavGraph(
         }
 
         composable(
+            route = Screen.NewAppDate.route
+        ) {
+            NewAppDateScreen(
+                navController = navController,
+                viewModel = viewModel
+            )
+        }
+
+
+
+        composable(
             route = Screen.NewAppDetails.route
         ) {
             NewAppDetailsScreen(
@@ -62,6 +74,9 @@ fun NewAppointmentNavGraph(
 fun MainNavGraph(
     navController: NavHostController
 ) {
+
+    val viewModel: MainFlowViewModel = hiltViewModel()
+
     NavHost(
         navController = navController,
         startDestination = Screen.Welcome.route
@@ -71,7 +86,8 @@ fun MainNavGraph(
             route = Screen.Welcome.route
         ) {
             WelcomeScreen(
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         }
 

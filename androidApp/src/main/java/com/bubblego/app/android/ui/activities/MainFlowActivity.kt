@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bubblego.app.android.ui.MainNavGraph
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainFlowActivity : ComponentActivity() {
 
     lateinit var navController: NavHostController

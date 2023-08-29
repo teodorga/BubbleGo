@@ -77,10 +77,6 @@ fun ConstraintLayoutNewAppLocation(
 
         val context = LocalContext.current
 
-        var locationTextHolder by remember {
-            mutableStateOf("Place the marker on the map accordingly")
-        }
-
         WelcomeTitle(
             text = "Location",
             modifier = Modifier.constrainAs(welcomeTitle) {
@@ -132,7 +128,7 @@ fun ConstraintLayoutNewAppLocation(
         )
 
         SecondDescriptionText(
-            text = locationTextHolder,
+            text = viewModel.locationTextHolder.value,
             modifier = Modifier.constrainAs(secondDescriptionText) {
                 top.linkTo(mapHolder.bottom, margin = 10.dp)
                 start.linkTo(parent.start)
@@ -140,34 +136,32 @@ fun ConstraintLayoutNewAppLocation(
             }
         )
 
-        val geocoder = Geocoder(context, Locale.getDefault())
+        if (!cameraPositionState.isMoving) {
+            viewModel.getGeocoderAddress(
+                context,
+                cameraPositionState.position.target.latitude,
+                cameraPositionState.position.target.longitude
+            )
+        }
+
 
         PrimaryButton(
             text = "Select location",
+            enabled = true,
             modifier = Modifier.constrainAs(selectLocationButton) {
                 bottom.linkTo(parent.bottom, margin = 50.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
         ) {
+            viewModel.location.value = Pair(
+                cameraPositionState.position.target.latitude,
+                cameraPositionState.position.target.longitude
+            )
 
-            if (!cameraPositionState.isMoving) {
-                val address = geocoder.getFromLocation(
-                    cameraPositionState.position.target.latitude,
-                    cameraPositionState.position.target.longitude,
-                    1,
-                )
-                locationTextHolder = address!![0].getAddressLine(0)
-
-                viewModel.location.value = Pair(
-                    cameraPositionState.position.target.latitude,
-                    cameraPositionState.position.target.longitude
-                )
-
-                navController.navigate(
-                    route = Screen.NewAppDetails.route
-                )
-            }
+            navController.navigate(
+                route = Screen.NewAppDate.route
+            )
         }
     }
 }

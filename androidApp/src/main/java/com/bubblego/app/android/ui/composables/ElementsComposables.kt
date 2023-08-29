@@ -11,13 +11,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -27,6 +31,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bubblego.app.android.R
 import com.bubblego.app.android.theme.BubbleCarTheme
 import com.bubblego.app.android.theme.bubbleCarCheckboxColors
+import com.bubblego.app.android.theme.bubbleCarGooglePayButtonColors
 import com.bubblego.app.android.theme.bubbleCarOutlinedColors
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -48,16 +53,45 @@ fun HolderBox(modifier: Modifier) {
 }
 
 @Composable
-fun PrimaryButton(text: String, modifier: Modifier, onClick: () -> Unit) {
+fun PrimaryButton(text: String, modifier: Modifier, enabled: Boolean, onClick: () -> Unit) {
     Button(
         modifier = modifier
             .fillMaxWidth(),
-        onClick = onClick
+        onClick = onClick,
+        enabled = enabled
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.button,
             color = MaterialTheme.colors.background,
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+fun TimePickerButton(
+    text: String,
+    modifier: Modifier,
+    colors: ButtonColors,
+    enabled: Boolean,
+    onClick: () -> Unit
+) {
+    Button(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        onClick = onClick,
+        enabled = enabled,
+        shape = RoundedCornerShape(50),
+        elevation = null,
+        colors = colors
+    ) {
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.body1,
+            fontSize = 35.sp,
             textAlign = TextAlign.Center,
         )
     }
@@ -283,15 +317,34 @@ fun CustomEditText(
 @Composable
 fun CustomGooglePayButton(
     modifier: Modifier,
+    enabled: Boolean,
     onClick: () -> Unit
 ) {
-    PayButton(
-        modifier = modifier,
+    Button(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(50.dp)
+            .padding(horizontal = 50.dp),
         onClick = onClick,
-        allowedPaymentMethods = "TODO",
-        type = ButtonType.Pay,
-        theme = ButtonTheme.Dark
-    )
+        colors = bubbleCarGooglePayButtonColors(),
+        shape = RoundedCornerShape(50),
+        enabled = enabled
+    ) {
+        Text(
+            text = "Pay with",
+            style = MaterialTheme.typography.button,
+            textAlign = TextAlign.Center,
+        )
+
+        Icon(
+            painter = painterResource(id = R.drawable.google_pay_logo_svg),
+            modifier = Modifier
+                .scale(0.8f)
+                .padding(start = 10.dp),
+            contentDescription = "drawable icons",
+            tint = Color.Unspecified
+        )
+    }
 }
 
 @Composable

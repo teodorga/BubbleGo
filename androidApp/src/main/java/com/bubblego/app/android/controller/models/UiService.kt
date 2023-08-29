@@ -1,4 +1,4 @@
-package com.bubblego.app.android.ui.models
+package com.bubblego.app.android.controller.models
 
 import androidx.compose.runtime.MutableState
 

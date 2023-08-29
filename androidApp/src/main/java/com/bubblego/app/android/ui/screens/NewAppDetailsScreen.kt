@@ -216,6 +216,7 @@ fun ConstraintLayoutNewAppDetails(
 
                 PrimaryButton(
                     text = "Continue",
+                    enabled = true,
                     modifier = Modifier.constrainAs(continueButton) {
                         top.linkTo(carColorEditText.bottom, margin = 50.dp)
                         start.linkTo(parent.start)
